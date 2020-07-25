@@ -1,0 +1,21 @@
+kind: pipeline
+type: docker
+name: telegraf-forwarder
+
+steps:
+
+  - name: docker publish
+    image: plugins/docker
+    when:
+      event:
+        - tag
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      registry: http://docker.internal.mapes.info
+      insecure: true
+      repo: docker.internal.mapes.info/telegraf-forwarder
+      mirror: https://docker.mapes.info
+      tags: '${DRONE_TAG}'
